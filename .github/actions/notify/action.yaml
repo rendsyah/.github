@@ -10,6 +10,9 @@ inputs:
   notify_url:
     required: true
     description: "API endpoint that receives the notification."
+  remarks:
+    required: false
+    description: "Remarks to include in the notification."
 
 runs:
   using: "composite"
@@ -24,6 +27,7 @@ runs:
         ACTOR: ${{ github.actor }}
         COMMITTERS: ${{ github.event.head_commit.author.name }}
         BUILD_NUMBER: ${{ github.run_number }}
+        REMARKS: ${{ inputs.remarks }}
         NOTIFY_URL: ${{ inputs.notify_url }}
         RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         COMMIT_URL: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
@@ -36,6 +40,7 @@ runs:
           --arg actor "$ACTOR" \
           --arg committers "$COMMITTERS" \
           --arg build_number "$BUILD_NUMBER" \
+          --arg remarks "$REMARKS" \
           --arg run_url "$RUN_URL" \
           --arg commit_url "$COMMIT_URL" \
           '{
@@ -46,6 +51,7 @@ runs:
             actor: $actor,
             committers: $committers,
             build_number: $build_number,
+            remarks: $remarks,
             run_url: $run_url,
             commit_url: $commit_url
           }' | curl -fsS --max-time 5 -o /dev/null -X POST "$NOTIFY_URL" \
