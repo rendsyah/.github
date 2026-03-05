@@ -11,7 +11,7 @@ inputs:
     required: true
     description: "API endpoint that receives the notification."
   remarks:
-    required: false
+    required: true
     description: "Remarks to include in the notification."
 
 runs:
